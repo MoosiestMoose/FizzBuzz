@@ -10,11 +10,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33BCF7DA-DF8B-4616-8450-49B3BF2943EB}</ProjectGuid>
+    <ProjectGuid>{AD1F2277-6D06-43C6-B998-73261B68079D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FizzBuzz</RootNamespace>
-    <AssemblyName>FizzBuzz</AssemblyName>
+    <RootNamespace>SessionTwoChallenge</RootNamespace>
+    <AssemblyName>SessionTwoChallenge</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -52,11 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="CmdProjectSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FizzBuzz.addin" />
+    <Content Include="SessionTwoChallenge.addin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -71,7 +71,7 @@ if exist "$(AppData)\Autodesk\REVIT\Addins\2021" copy "$(ProjectDir)$(OutputPath
   </Target>
   -->
   <Target Name="AfterClean">
-    <Delete Files="$(AppData)\Autodesk\REVIT\Addins\2021\FizzBuzz.addin" />
-    <Delete Files="$(AppData)\Autodesk\REVIT\Addins\2021\FizzBuzz.dll" />
+    <Delete Files="$(AppData)\Autodesk\REVIT\Addins\2021\SessionTwoChallenge.addin" />
+    <Delete Files="$(AppData)\Autodesk\REVIT\Addins\2021\SessionTwoChallenge.dll" />
   </Target>
 </Project>

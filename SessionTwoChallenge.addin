@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command SessionTwoChallenge</Text>
+    <Description>Some description for SessionTwoChallenge</Description>
+    <Assembly>SessionTwoChallenge.dll</Assembly>
+    <FullClassName>SessionTwoChallenge.CmdProjectSetup</FullClassName>
+    <ClientId>ddc0def3-f61c-456f-87e9-cad116338055</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application SessionTwoChallenge</Name>
+    <Assembly>SessionTwoChallenge.dll</Assembly>
+    <FullClassName>SessionTwoChallenge.App</FullClassName>
+    <ClientId>6B77F56B-3076-44D4-A018-2674BDEB8146</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>

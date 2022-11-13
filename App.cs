@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace FizzBuzz
+namespace SessionTwoChallenge
 {
     internal class App : IExternalApplication
     {
