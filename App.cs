@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace SessionTwoChallenge
+namespace Week_3
 {
     internal class App : IExternalApplication
     {

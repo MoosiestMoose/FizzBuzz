@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command Week 3</Text>
+    <Description>Some description for Week 3</Description>
+    <Assembly>Week 3.dll</Assembly>
+    <FullClassName>Week_3.Command</FullClassName>
+    <ClientId>73217b12-bc25-4051-bcf2-8481cfcff169</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application Week 3</Name>
+    <Assembly>Week 3.dll</Assembly>
+    <FullClassName>Week_3.App</FullClassName>
+    <ClientId>DAAC1DF9-9A74-4643-8A52-0D8EC36171F3</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>

@@ -1,6 +1,0 @@
-R:\revit\dynamo\WIP\Laura\C#\ArchSmWk2\SessionTwoChallenge\bin\Debug\SessionTwoChallenge.dll
-R:\revit\dynamo\WIP\Laura\C#\ArchSmWk2\SessionTwoChallenge\bin\Debug\SessionTwoChallenge.pdb
-R:\revit\dynamo\WIP\Laura\C#\ArchSmWk2\SessionTwoChallenge\obj\Debug\SessionTwoChallenge.csproj.AssemblyReference.cache
-R:\revit\dynamo\WIP\Laura\C#\ArchSmWk2\SessionTwoChallenge\obj\Debug\SessionTwoChallenge.csproj.CoreCompileInputs.cache
-R:\revit\dynamo\WIP\Laura\C#\ArchSmWk2\SessionTwoChallenge\obj\Debug\SessionTwoChallenge.dll
-R:\revit\dynamo\WIP\Laura\C#\ArchSmWk2\SessionTwoChallenge\obj\Debug\SessionTwoChallenge.pdb
