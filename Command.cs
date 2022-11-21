@@ -28,7 +28,6 @@ namespace Week_3
             return feet;
         }
 
-
         public Result Execute(
           ExternalCommandData commandData,
           ref string message,
@@ -39,23 +38,18 @@ namespace Week_3
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
-
-            //          *****  Get stuff from Revit API  *****
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
-
             //                  ***** TRANSACTION START CODE  ***** 
             Transaction trans = new Transaction(doc);
             trans.Start("Create level and sheet");
 
+            //                  ***** LEVELS  *****
             //              *****  open levels csv file  *****
-      
+            //       TODO add task dialogue for instructions 
             Forms.OpenFileDialog selectLevelfile = new Forms.OpenFileDialog();
             selectLevelfile.InitialDirectory = "R:\\revit\\dynamo\\WIP\\Laura\\C#\\";
             selectLevelfile.Filter = "CSV file|*.csv";
 
             string levelfilePATH = "";
-
             if (selectLevelfile.ShowDialog() == Forms.DialogResult.OK)
             {
                 levelfilePATH = selectLevelfile.FileName;
@@ -63,60 +57,10 @@ namespace Week_3
 
             if (levelfilePATH != "")
             {
-                // do something with file
+                return Result.Failed;
             }
 
-            //          *****  read data from excel - Levels  *****
-            string[] fileArrayLvl = System.IO.File.ReadAllLines(levelfilePATH);
-
-
-            //              *****  remove header row using split to separate text file data  *****
-            foreach (string rowst in fileArrayLvl.Skip(1))
-            {
-                string[] cellst = rowst.Split(',');
-                string LevelNames = cellst[0];
-                //string LevelElevation = cellst[2];
-                int LevelElevationInt = Convert.ToInt32(cellst[2]);
-                //double elevationdbl = 0;
-                double lvlHeight = MakeMetric(LevelElevationInt);
-                Level myLvl = Level.Create(doc, lvlHeight);
-                myLvl.Name = LevelNames;
-
-            }
-
-
-            //           ***** open sheets csv file  *****
-            Forms.OpenFileDialog selectsheetfile = new Forms.OpenFileDialog();
-            selectsheetfile.InitialDirectory = "R:\\revit\\dynamo\\WIP\\Laura\\C#\\";
-            selectsheetfile.Filter = "CSV file|*.csv";
-
-            string sheetfilePATH = "";
-
-            if (selectsheetfile.ShowDialog() == Forms.DialogResult.OK)
-            {
-                sheetfilePATH = selectsheetfile.FileName;
-            }
-
-            if (sheetfilePATH != "")
-            {
-                // do something with file
-            }
-
-            //          *****  read data from excel - sheets  *****
-            
-            string[] fileArraySh = System.IO.File.ReadAllLines(sheetfilePATH);
-
-            //              *****  remove header row using split to separate text file data  *****
-            foreach (string rowst in fileArraySh.Skip(1))
-            {
-                string[] cellst = rowst.Split(',');
-                string SheetNumber = cellst[0];
-                string SheetName = cellst[1];
-                ViewSheet thesheets = ViewSheet.Create(doc, collector.FirstElementId());
-                thesheets.SheetNumber = SheetNumber;
-                thesheets.Name = SheetName;
-            }
-
+            //                    ***** VIEWS  *****
             //              *****  Create views - RCP and Plan  *****
             FilteredElementCollector ViewFilterCollector = new FilteredElementCollector(doc);
             ViewFilterCollector.OfClass(typeof(ViewFamilyType));
@@ -132,24 +76,64 @@ namespace Week_3
                     ViewFamTypeRCP = VFT;
             }
 
-            //Transaction Tran = new Transaction(doc);
-            //Tran.Start("Create my things");
+            //          *****  read data from excel - Levels  *****
+            string[] fileArrayLvl = System.IO.File.ReadAllLines(levelfilePATH);
+            
+            //             *****  remove header row using split to separate text file data  *****
+            foreach (string rowst in fileArrayLvl.Skip(1))
+            {
+                string[] cellst = rowst.Split(',');
+                string LevelNames = cellst[0];
+                int LevelElevationInt = Convert.ToInt32(cellst[2]);
+                double lvlHeight = MakeMetric(LevelElevationInt);
+                Level myLvl = Level.Create(doc, lvlHeight);
+                myLvl.Name = LevelNames;
+                ViewPlan planviews = ViewPlan.Create(doc, ViewFamTypePlan.Id, myLvl.Id);
+                ViewPlan RCPviews = ViewPlan.Create(doc, ViewFamTypeRCP.Id, myLvl.Id);
+            }
+            //                  *****   END LEVELS AND VIEWS   *****       
+           
+            //                  *****  SHEETS  *****
+            //          *****  Get stuff from Revit API for sheets *****
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
 
-            Level LevelName = Level.Create(doc, 20);
+            //           ***** open sheets csv file  *****
+            Forms.OpenFileDialog selectsheetfile = new Forms.OpenFileDialog();
+            selectsheetfile.InitialDirectory = "R:\\revit\\dynamo\\WIP\\Laura\\C#\\";
+            selectsheetfile.Filter = "CSV file|*.csv";
 
-            ViewPlan planviews = ViewPlan.Create(doc, ViewFamTypePlan.Id, LevelName.Id);
-            ViewPlan RCPviews = ViewPlan.Create(doc, ViewFamTypeRCP.Id, LevelName.Id);
+            string sheetfilePATH = "";
 
+            if (selectsheetfile.ShowDialog() == Forms.DialogResult.OK)
+            {
+                sheetfilePATH = selectsheetfile.FileName;
+            }
 
+            if (sheetfilePATH != "")
+            {
+                return Result.Failed;
+            }
 
+            //          *****  read data from excel - sheets  *****
+
+            string[] fileArraySh = System.IO.File.ReadAllLines(sheetfilePATH);
+
+            //              *****  remove header row using split to separate text file data  *****
+            foreach (string rowst in fileArraySh.Skip(1))
+            {
+                string[] cellst = rowst.Split(',');
+                string SheetNumber = cellst[0];
+                string SheetName = cellst[1];
+                ViewSheet thesheets = ViewSheet.Create(doc, collector.FirstElementId());
+                thesheets.SheetNumber = SheetNumber;
+                thesheets.Name = SheetName;
+            }
 
             // Modify Revit document within transaction 
 
-
             trans.Commit();
             trans.Dispose();
-
-
 
             return Result.Succeeded;
         }
