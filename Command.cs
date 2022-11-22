@@ -39,8 +39,7 @@ namespace Week_3
             Document doc = uidoc.Document;
 
             //                  ***** TRANSACTION START CODE  ***** 
-            Transaction trans = new Transaction(doc);
-            trans.Start("Create level and sheet");
+           
 
             //                  ***** LEVELS  *****
             //              *****  open levels csv file  *****
@@ -55,7 +54,7 @@ namespace Week_3
                 levelfilePATH = selectLevelfile.FileName;
             }
 
-            if (levelfilePATH != "")
+            if (levelfilePATH == "")
             {
                 return Result.Failed;
             }
@@ -78,7 +77,9 @@ namespace Week_3
 
             //          *****  read data from excel - Levels  *****
             string[] fileArrayLvl = System.IO.File.ReadAllLines(levelfilePATH);
-            
+
+            Transaction trans = new Transaction(doc);
+            trans.Start("Create level and sheet");
             //             *****  remove header row using split to separate text file data  *****
             foreach (string rowst in fileArrayLvl.Skip(1))
             {
@@ -110,9 +111,9 @@ namespace Week_3
                 sheetfilePATH = selectsheetfile.FileName;
             }
 
-            if (sheetfilePATH != "")
+            if (sheetfilePATH == "")
             {
-                return Result.Failed;
+                // return Result.Failed;
             }
 
             //          *****  read data from excel - sheets  *****
