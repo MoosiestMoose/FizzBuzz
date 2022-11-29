@@ -78,6 +78,7 @@ namespace Week_3
 
             Transaction trans = new Transaction(doc);
             trans.Start("Create level and sheet");
+
             //             *****  remove header row using split to separate text file data  *****
             foreach (string rowst in fileArrayLvl.Skip(1))
             {
@@ -90,11 +91,21 @@ namespace Week_3
                 ViewPlan planviews = ViewPlan.Create(doc, ViewFamTypePlan.Id, myLvl.Id);
                 ViewPlan RCPviews = ViewPlan.Create(doc, ViewFamTypeRCP.Id, myLvl.Id);
 
+                if (planviews.Name.Contains("Roof") == true)
+                    {
+                    planviews.Name = "Roof Plan";
+                    }
+                else
+                {
+                    planviews.Name = planviews.Name + "Floor Plan";
+                }
+                RCPviews.Name = RCPviews.Name + "RCP";
+
             }
+
             //                  *****   END LEVELS AND VIEWS   *****       
 
             //                  *****  SHEETS  *****
-
 
             //           ***** open sheets csv file  *****
             Forms.OpenFileDialog selectsheetfile = new Forms.OpenFileDialog();
@@ -112,22 +123,28 @@ namespace Week_3
             {
                 // return Result.Failed;
             }
-
-            //          *****  read data from excel - sheets  *****
-
-            string[] fileArraySh = System.IO.File.ReadAllLines(sheetfilePATH);
-
+            // Get titleblock element
             Element TBlock = TitleBlockByName(doc, "A1 Landscape");
 
-            //              *****  remove header row using split to separate text file data  *****
+            //          *****  read data from excel - sheets  + remove header row using split  *****
+            string[] fileArraySh = System.IO.File.ReadAllLines(sheetfilePATH);
+
             foreach (string rowst in fileArraySh.Skip(1))
             {
                 string[] cellst = rowst.Split(',');
                 string SheetNumber = cellst[0];
                 string SheetName = cellst[1];
+
                 ViewSheet thesheets = ViewSheet.Create(doc, TBlock.Id);
                 thesheets.SheetNumber = SheetNumber;
-             
+                thesheets.Name = SheetName;
+
+                View currentView = GetViewByName(doc, thesheets.Name);
+
+                XYZ insPoint = new XYZ(1.5, 1, 0);
+
+                Viewport CurrentVP = Viewport.Create(doc, thesheets.Id, currentView.Id, insPoint);
+
             }
 
             // Modify Revit document within transaction 
@@ -152,7 +169,36 @@ namespace Week_3
                 }
             }
             return null;
-        }      
+        }
+
+        //       *****    Get titleblock location info  *****
+        private XYZ GetSheetCenterPoint(ViewSheet currentSheet)
+        {
+            // Get the middle point of the sheet (insertion point)
+            BoundingBoxUV outline = currentSheet.Outline;
+            double x = (outline.Max.U + outline.Min.U) / 2;
+            double y = (outline.Max.V + outline.Min.V) / 2;
+
+            XYZ returnPoint = new XYZ(x, y, 0);
+
+            return returnPoint;
+        }
+
+        private View GetViewByName(Document doc, string name)
+        {
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfCategory(BuiltInCategory.OST_Views);
+
+            foreach (View currentView in collector)
+            {
+                if (currentView.Name == name)
+                {
+                    return currentView;
+                }
+            }
+
+            return null;
+        }
 
     }
 }
