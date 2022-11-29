@@ -8,19 +8,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using Forms = System.Windows.Forms;
 
 #endregion
 
 namespace Week_3
 {
-
-
     [Transaction(TransactionMode.Manual)]
     public class Command : IExternalCommand
 
        {
-
         internal double MakeMetric(double metres)
         {
             double feet = metres * 3.28084;
@@ -91,13 +89,12 @@ namespace Week_3
                 myLvl.Name = LevelNames;
                 ViewPlan planviews = ViewPlan.Create(doc, ViewFamTypePlan.Id, myLvl.Id);
                 ViewPlan RCPviews = ViewPlan.Create(doc, ViewFamTypeRCP.Id, myLvl.Id);
+
             }
             //                  *****   END LEVELS AND VIEWS   *****       
-           
+
             //                  *****  SHEETS  *****
-            //          *****  Get stuff from Revit API for sheets *****
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+
 
             //           ***** open sheets csv file  *****
             Forms.OpenFileDialog selectsheetfile = new Forms.OpenFileDialog();
@@ -120,15 +117,17 @@ namespace Week_3
 
             string[] fileArraySh = System.IO.File.ReadAllLines(sheetfilePATH);
 
+            Element TBlock = TitleBlockByName(doc, "A1 Landscape");
+
             //              *****  remove header row using split to separate text file data  *****
             foreach (string rowst in fileArraySh.Skip(1))
             {
                 string[] cellst = rowst.Split(',');
                 string SheetNumber = cellst[0];
                 string SheetName = cellst[1];
-                ViewSheet thesheets = ViewSheet.Create(doc, collector.FirstElementId());
+                ViewSheet thesheets = ViewSheet.Create(doc, TBlock.Id);
                 thesheets.SheetNumber = SheetNumber;
-                thesheets.Name = SheetName;
+             
             }
 
             // Modify Revit document within transaction 
@@ -139,7 +138,21 @@ namespace Week_3
             return Result.Succeeded;
         }
 
-       
+        //          *****  Get stuff from Revit API for sheets *****
+        internal Element TitleBlockByName(Document doc, string TBlockName)
+        {
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+                        
+            foreach (Element TitleBlock in collector)
+            {
+                if (TitleBlock.Name == TBlockName)
+                {
+                    return TitleBlock;
+                }
+            }
+            return null;
+        }      
 
     }
 }
